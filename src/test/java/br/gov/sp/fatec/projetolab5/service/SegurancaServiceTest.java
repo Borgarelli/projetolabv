@@ -37,7 +37,7 @@ public class SegurancaServiceTest {
         List<Usuario> usuarios = new ArrayList<Usuario>();
         usuarios.add(usuario);
         Optional<Usuario> usuarioOp = Optional.of(usuario);
-        Mockito.when(usuarioRepo.findById(any())).thenReturn(usuarioOp);
+        Mockito.when(usuarioRepo.findById(1L)).thenReturn(usuarioOp);
         Mockito.when(usuarioRepo.save(any())).thenReturn(usuario);
         Mockito.when(usuarioRepo.findAll()).thenReturn(usuarios);
     }
@@ -47,10 +47,41 @@ public class SegurancaServiceTest {
         assertEquals("Teste", service.buscarUsuarioPorId(1L).getNome());
     }
 
+    //para dar erro
+    @Test
+    public void buscarUsuarioPorIdTestNOk() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.buscarUsuarioPorId(2L);
+        });
+    }
+
+    //novo Usuário nome null e vazio
     @Test
     public void novoUsuarioTestNOkNomeNull() {
         assertThrows(IllegalArgumentException.class, () -> {
                 service.novoUsuario(null, "Senha");
+            });
+    }
+
+    @Test
+    public void novoUsuarioTestNOkNomeVazio() {
+        assertThrows(IllegalArgumentException.class, () -> {
+                service.novoUsuario("", "Senha");
+            });
+    }
+
+    //novo Usuário senha null e vazio
+    @Test
+    public void novoUsuarioTestNOkSenhaNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+                service.novoUsuario("Teste", null);
+            });
+    }
+
+    @Test
+    public void novoUsuarioTestNOkSenhaVazio() {
+        assertThrows(IllegalArgumentException.class, () -> {
+                service.novoUsuario("Teste", "");
             });
     }
 
