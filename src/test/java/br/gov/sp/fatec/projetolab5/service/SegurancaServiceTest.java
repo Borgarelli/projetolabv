@@ -57,6 +57,13 @@ public class SegurancaServiceTest {
 
     //novo Usuário nome null e vazio
     @Test
+    public void buscarUsuarioPorIdTestNOk() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.buscarUsuarioPorId(2L);
+        });
+    }
+
+    @Test
     public void novoUsuarioTestNOkNomeNull() {
         assertThrows(IllegalArgumentException.class, () -> {
                 service.novoUsuario(null, "Senha");
