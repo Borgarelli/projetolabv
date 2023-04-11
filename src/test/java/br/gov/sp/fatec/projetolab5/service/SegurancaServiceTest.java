@@ -1,5 +1,5 @@
 package br.gov.sp.fatec.projetolab5.service;
-
+//importa asserções e bibliotecas necessárias
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,14 +22,18 @@ import br.gov.sp.fatec.projetolab5.repository.UsuarioRepository;
 @SpringBootTest
 public class SegurancaServiceTest {
 
+    //Injeta o serviço de segurança
     @Autowired
     private SegurancaService service;
 
+    //Cria um mock para o repositório de usuário
     @MockBean
     private UsuarioRepository usuarioRepo;
 
+    //Configuração prévia dos testes
     @BeforeEach
     public void setUp() {
+        //Cria um usuário para os testes
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNome("Teste");
@@ -37,17 +41,24 @@ public class SegurancaServiceTest {
         List<Usuario> usuarios = new ArrayList<Usuario>();
         usuarios.add(usuario);
         Optional<Usuario> usuarioOp = Optional.of(usuario);
+        
+        //Define o comportamento do mock para o método findById
         Mockito.when(usuarioRepo.findById(1L)).thenReturn(usuarioOp);
+        
+        //Define o comportamento do mock para o método save
         Mockito.when(usuarioRepo.save(any())).thenReturn(usuario);
+        
+        //Define o comportamento do mock para o método findAll
         Mockito.when(usuarioRepo.findAll()).thenReturn(usuarios);
     }
 
+    //Teste para buscar um usuário por ID
     @Test
     public void buscarUsuarioPorIdTestOk() {
         assertEquals("Teste", service.buscarUsuarioPorId(1L).getNome());
     }
 
-    //para dar erro
+    //Teste para buscar um usuário por ID que não existe, deve dar erro
     @Test
     public void buscarUsuarioPorIdTestNOk() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -55,6 +66,7 @@ public class SegurancaServiceTest {
         });
     }
 
+    //Teste para criar um novo usuário com nome nulo, deve dar erro
     //novo Usuário nome null e vazio
     @Test
     public void novoUsuarioTestNOkNomeNull() {
@@ -63,6 +75,7 @@ public class SegurancaServiceTest {
             });
     }
 
+    //Teste para criar um novo usuário com nome vazio, deve dar erro
     @Test
     public void novoUsuarioTestNOkNomeVazio() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -70,6 +83,7 @@ public class SegurancaServiceTest {
             });
     }
 
+    //Teste para criar um novo usuário com senha nula, deve dar erro
     //novo Usuário senha null e vazio
     @Test
     public void novoUsuarioTestNOkSenhaNull() {
@@ -78,6 +92,7 @@ public class SegurancaServiceTest {
             });
     }
 
+    //Teste para criar um novo usuário com senha vazia, deve dar erro
     @Test
     public void novoUsuarioTestNOkSenhaVazio() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -85,6 +100,7 @@ public class SegurancaServiceTest {
             });
     }
 
+    //Teste para criar um novo usuário com nome e senha válidos, não deve dar erro
     @Test
     public void novoUsuarioTestOk() {
         assertDoesNotThrow(() -> {
@@ -92,9 +108,11 @@ public class SegurancaServiceTest {
             });
     }
 
+
     @Test
     public void todosUsuariosTestOk() {
         assertEquals(1, service.todosUsuarios().size());
     }
     
 }
+
