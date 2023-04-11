@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.projetolab5.service;
 // Importa as classes necessárias para o funcionamento do código
+//Para rodar o jacoco, basta acessar a pasta target, depois ste/jacoco e clicar emcima de index.html com o botão direito e clicar em live server
 import java.util.ArrayList;
 import java.util.List;
 
