@@ -32,8 +32,10 @@ public class ComentarioServiceTest {
     @MockBean
     private ComentarioRepository comentarioRepo;
 
+    // Teste para adicionar um novo comentário, com sucesso.
     @Test
     public void novoComentarioTestOk() {
+        // Criação de objetos de exemplo
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNome("Teste");
@@ -45,22 +47,27 @@ public class ComentarioServiceTest {
         anotacao.setDataHora(new Date());
         Comentario comentario = new Comentario();
         comentario.setId(1L);
-        comentario.setTexto("Comentário teste");
+        comentario.setTexto("Comentário teste 1");
         comentario.setDataHora(new Date());
         comentario.setAnotacao(anotacao);
+
+        // Configuração dos objetos de mock para retornar resultados esperados
         Mockito.when(anotacaoRepo.findById(1L)).thenReturn(Optional.of(anotacao));
         Mockito.when(comentarioRepo.save(any())).thenReturn(comentario);
-        assertEquals("Comentário teste", service.novoComentario("Comentário teste", 1L).getTexto());
+
+        // Execução do método sendo testado e verificação do resultado
+        assertEquals("Comentário teste 1", service.novoComentario("Comentário teste 1", 1L).getTexto());
     }
 
+    // Teste para adicionar um novo comentário com uma anotação que não existe
     @Test
     public void novoComentarioAutorizacaoNaoExisteTestNOk() {
+        // Configuração do objeto de mock para retornar um valor vazio para o findById
         Mockito.when(anotacaoRepo.findById(1L)).thenReturn(Optional.empty());
+
+        // Execução do método sendo testado e verificação do lançamento da exceção esperada
         assertThrows(ResponseStatusException.class, () -> {
             service.novoComentario("Comentário teste", 1L);
         });
-    }
-
-
-    
+    }  
 }
